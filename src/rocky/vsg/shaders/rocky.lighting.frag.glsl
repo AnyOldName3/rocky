@@ -94,6 +94,8 @@ void apply_lighting(inout vec4 color, in vec3 vertex_view, in vec3 normal)
     {
         vec3 light_color = vsg_lights.pack[index++].rgb;
         vec3 direction = normalize(vsg_lights.pack[index++].xyz);
+        int shadowMapCount = int(vsg_lights.pack[index++].r);
+        index += 8 * shadowMapCount;
     }
 
     for (int i = 0; i < point_count; ++i)
@@ -132,6 +134,8 @@ void apply_lighting(inout vec4 color, in vec3 vertex_view, in vec3 normal)
         vec4 light_color = vsg_lights.pack[index++];
         vec4 position_cosInnerAngle = vsg_lights.pack[index++];
         vec4 lightDirection_cosOuterAngle = vsg_lights.pack[index++];
+        int shadowMapCount = int(vsg_lights.pack[index++].r);
+        index += 8 * shadowMapCount;
     }
 #endif
 
