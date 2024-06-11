@@ -143,7 +143,14 @@ void atmos_vertex_main(inout vec3 vertex_view)
 
     // calculate the light direction in view space:
     vec4 light_counts = vsg_lights.pack[0];
-    int sun = 1 + (int(light_counts[0]) * 1) + (int(light_counts[1]) * 2); // first point light
+    int sun = 1 + (int(light_counts[0]) * 1); // first directional light
+    // skip directional lights to get first point light
+    for (int i = 0; i < int(light_counts[1]); ++i)
+    {
+        sun += 2;
+        int shadowMapCount = int(vsg_lights.pack[sun++].r);
+        sun += 8 * shadowMapCount;
+    }
     // vec4 diffuse = vsg_light.v[sun + 0];
     vec4 light_pos_view = vsg_lights.pack[sun + 1];
     atmos_lightDir = normalize(light_pos_view.xyz);
